@@ -1,6 +1,6 @@
 <link rel="import" href="../the-graph/the-graph.html">
 
-<polymer-element name="the-graph-editor" attributes="grid snap width height autolayout theme selectedNodes selectedEdges animatedEdges onContextMenu" touch-action="none">
+<polymer-element name="the-graph-editor" attributes="grid snap width height autolayout theme selectedNodes selectedGroups selectedEdges animatedEdges onContextMenu" touch-action="none">
   <template>
     <the-graph id="graph" 
       name="{{ graph.properties.name }}" 
@@ -11,6 +11,7 @@
       autolayout="{{autolayout}}" 
       theme="{{theme}}" 
       selectedNodes="{{selectedNodes}}" 
+      selectedGroups="{{selectedGroups}}" 
       selectedEdges="{{selectedEdges}}" 
       animatedEdges="{{animatedEdges}}" 
       getMenuDef="{{getMenuDef}}">

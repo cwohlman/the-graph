@@ -42,6 +42,7 @@
       snap: 36,
       theme: "dark",
       selectedNodes: [],
+      selectedGroups: [],
       selectedEdges: [],
       animatedEdges: [],
       created: function () {
@@ -91,6 +92,7 @@
             editable: this.editable,
             onEdgeSelection: this.onEdgeSelection.bind(this),
             onNodeSelection: this.onNodeSelection.bind(this),
+            onGroupSelection: this.onGroupSelection.bind(this),
             onPanScale: this.onPanScale.bind(this),
             getMenuDef: this.getMenuDef
           }),
@@ -151,6 +153,31 @@
         }
         this.fire('nodes', this.selectedNodes);
       },
+      onGroupSelection: function (itemKey, item, toggle) {
+        if (itemKey === undefined) {
+          if (this.selectedGroups.length>0) {
+            this.selectedGroups = [];
+          }
+          this.fire('groups', this.selectedGroups);
+          return;
+        }
+        if (toggle) {
+          var index = this.selectedGroups.indexOf(item);
+          var isSelected = (index !== -1);
+          var shallowClone = this.selectedGroups.slice();
+          if (isSelected) {
+            shallowClone.splice(index, 1);
+            this.selectedGroups = shallowClone;
+          } else {
+            shallowClone.push(item);
+            this.selectedGroups = shallowClone;
+          }
+        } else {
+          this.selectedGroups = [item];
+        }
+        this.fire('groups', this.selectedGroups);
+      },
+
       selectedNodesChanged: function () {
         if (!this.graphView) { return; }
         this.graphView.setSelectedNodes(this.selectedNodes);

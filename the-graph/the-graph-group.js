@@ -18,6 +18,11 @@
 
       // Don't pan under menu
       this.getDOMNode().addEventListener("trackstart", this.dontPan);
+      
+      // Tap to select this group
+      if (this.props.onGroupSelection) {
+        this.getDOMNode().addEventListener('tap', this.onGroupSelection);
+      }
 
       // Context menu
       if (this.props.showContext) {
