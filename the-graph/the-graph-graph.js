@@ -583,6 +583,7 @@
           scale: self.props.scale,
           label: group.name,
           nodes: group.nodes,
+          onGroupSelection: self.props.onGroupSelection,
           description: group.metadata.description,
           color: group.metadata.color,
           triggerMoveGroup: self.moveGroup,

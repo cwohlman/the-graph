@@ -33,6 +33,17 @@
       // HACK to change SVG class https://github.com/facebook/react/issues/1139
       this.componentDidUpdate();
     },
+    onGroupSelection: function (event) {
+      // This function copied from onNodeSelectin in the-graph-node.js
+      // Don't tap app (unselect)
+      // TODO: unselect nodes not in this group
+      event.stopPropagation();
+      // TODO: select nodes in this group?
+      // Don't toggle, this is a group, we won't allow multi select for groups
+      // var toggle = (TheGraph.metaKeyPressed || event .pointerType==="touch");
+      var toggle = false;
+      this.props.onGroupSelection(this.props.key, this.props.item /*.node*/, toggle)
+    },
     showContext: function (event) {
       // Don't show native context menu
       event.preventDefault();
