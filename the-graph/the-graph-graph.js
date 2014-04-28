@@ -324,8 +324,40 @@
         this.portInfo = {};
       }
 
+      // Proof of concept for hiding nodes
+      var nodesToHide = graph.nodes.filter(function (node) {
+        return node.component == "core/Merge";
+      }).map(function (node) {
+        return node.id;
+      });
+      var hiddenNodeEdges = {};
+      var edgesToHide = graph.edges.filter(function (edge) {
+        var hideFrom = nodesToHide.indexOf(edge.from.node) != -1;
+        var hideTo = nodesToHide.indexOf(edge.to.node) != -1;
+
+        if (hideFrom) {
+          hiddenNodeEdges[edge.from.node] = hiddenNodeEdges[edge.from.node] || {};
+          hiddenNodeEdges[edge.from.node].to = edge.to;
+        } else if (hideTo) {
+          hiddenNodeEdges[edge.to.node] = hiddenNodeEdges[edge.to.node] || {};
+          hiddenNodeEdges[edge.to.node].from = edge.from;
+        }
+
+        return hideFrom || hideTo;
+      });
+
+      var virtualEdges = [];
+
+      for (var prop in hiddenNodeEdges) {
+        virtualEdges.push(hiddenNodeEdges[prop]);
+      }
+
       // Nodes
-      var nodes = graph.nodes.map(function (node) {
+      var nodes = graph.nodes
+      .filter(function (node) {
+        return nodesToHide.indexOf(node.id) == -1;
+      })
+      .map(function (node) {
         var key = node.id;
         if (!node.metadata) {
           node.metadata = {};
@@ -361,7 +393,11 @@
       });
 
       // Edges
-      var edges = graph.edges.map(function (edge) {
+      var edges = graph.edges
+      .filter(function (edge) {
+        return edgesToHide.indexOf(edge) == -1;
+      }).concat(virtualEdges)
+      .map(function (edge) {
         var source = graph.getNode(edge.from.node);
         var target = graph.getNode(edge.to.node);
         if (!source || !target) {
